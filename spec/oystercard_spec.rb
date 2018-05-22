@@ -24,21 +24,33 @@ describe Oystercard do
 
   context 'journey' do
       it { is_expected.to respond_to(:touch_in) }
-      # it { is_expected.to respond_to(:touch_out) }
+      it { is_expected.to respond_to(:touch_out) }
 
     describe '#touch_in' do
+      let(:station) { double :station }
+
       it 'sets in_journey to true' do
         subject.top_up(Oystercard::MINIMUM_BALANCE)
-        subject.touch_in
+        subject.touch_in(station)
         expect(subject).to be_in_journey
       end
 
       it 'raises an error if insufficient funds on the card' do
-        expect { subject.touch_in }.to raise_error "Insufficient funds"
+        expect { subject.touch_in(station) }.to raise_error "Insufficient funds"
       end
+
+      # it { is_expected.to respond_to(:touch_in).with(1).argument }
+      it 'records the entry station after touch in' do
+        subject.top_up(Oystercard::MINIMUM_BALANCE)
+        subject.touch_in(station)
+        expect(subject.entry_station).to eq station
+      end
+
     end
 
     describe '#touch_out' do
+      let(:station) { double :station }
+
       it 'sets in_journey to false' do
         #subject.touch_in
         subject.touch_out
@@ -48,7 +60,7 @@ describe Oystercard do
       it 'deducts money for trip' do
         amount = Oystercard::MINIMUM_CHARGE
         subject.top_up(Oystercard::MINIMUM_BALANCE)
-        subject.touch_in
+        subject.touch_in(station)
         expect { subject.touch_out }.to change { subject.balance }.by(-amount)
       end
     end
