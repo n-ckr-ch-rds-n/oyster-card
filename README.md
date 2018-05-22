@@ -1,49 +1,14 @@
-# oystercard
+# Oyster Card
 
-In order to use public transport
-As a customer
-I want money on my card
+### [Makers Academy](https://www.makersacademy.com) - Week 2 Pair Programming Project
 
-In order to keep using public transport
-As a customer
-I want to add money to my card
+## Outline
+This program keeps track of the balance on a user's Oyster Card. The program allows a user to add money to the card (as long as it doesn't surpass the maximum balance) and subtracts money from the card at the end of the user's journey depending on how far the user traveled. The user is also able to view all of their previous trips and look up what zone a specific station is in. The program is also able to charge the user a penalty fair if they forget to touch in or out at the station. 
 
-In order to protect my money
-As a customer
-I don't want to put too much money on my card
+## The Task
+I used this project to practice TDD and OOP. I used the User Stories that are liste below to determine which Objects and Methods I needed to create. After creating the needed Objects and Methods, I wrote feature tests (tested using IRB) and followed up with unit tests (tested using RSPEC). The goal making all RSPEC tests pass by the end of the project was achieved. 
 
-In order to pay for my journey
-As a customer
-I need my fare deducted from my card
+## User Stories
+![alt text](https://github.com/JenStrong/oyster-card/blob/master/User%20Stories%20for%20Oyster%20Card.png "Pic")
 
-In order to get through the barriers
-As a customer
-I need to touch in and out
 
-In order to pay for my journey
-As a customer
-I need to have the minimum amount for a single journey
-
-In order to pay for my journey
-As a customer
-I need to pay for my journey when it's complete
-
-In order to pay for my journey
-As a customer
-I need to know where I've travelled from
-
-In order to know where I have been
-As a customer
-I want to see to all my previous trips
-
-In order to know how far I have travelled
-As a customer
-I want to know what zone a station is in
-
-In order to be charged correctly
-As a customer
-I need a penalty charge deducted if I fail to touch in or out
-
-In order to be charged the correct amount
-As a customer
-I need to have the correct fare calculated
