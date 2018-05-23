@@ -1,10 +1,13 @@
 require 'oystercard'
 
+
 describe Oystercard do
+
+subject(:oystercard) { described_class.new }
 
   context 'balance' do
     it 'checks initial balance' do
-      expect(subject.balance).to eq(0)
+      expect(oystercard.balance).to eq(0)
     end
   end
 
@@ -12,13 +15,13 @@ describe Oystercard do
       it { is_expected.to respond_to(:top_up).with(1).argument }
 
       it 'can top up the balance' do
-        expect { subject.top_up(50) }.to change { subject.balance }.by(50)
+        expect { oystercard.top_up(50) }.to change { oystercard.balance }.by(50)
       end
 
       it 'raises an error when balance is above £90' do
-        subject.top_up(Oystercard::MAXIMUM_BALANCE)
+        oystercard.top_up(Oystercard::MAXIMUM_BALANCE)
         error = "Balance cannot be above £ #{Oystercard::MAXIMUM_BALANCE}"
-        expect { subject.top_up(1) }.to raise_error error
+        expect { oystercard.top_up(1) }.to raise_error error
       end
     end
 
@@ -30,22 +33,21 @@ describe Oystercard do
       let(:station) { double :station }
 
       it 'sets in_journey to true' do
-        subject.top_up(Oystercard::MINIMUM_BALANCE)
-        subject.touch_in(station)
-        expect(subject).to be_in_journey
+        oystercard.top_up(Oystercard::MINIMUM_BALANCE)
+        oystercard.touch_in(station)
+        expect(oystercard).to be_in_journey
       end
 
       it 'raises an error if insufficient funds on the card' do
-        expect { subject.touch_in(station) }.to raise_error "Insufficient funds"
+        expect { oystercard.touch_in(station) }.to raise_error "Insufficient funds"
       end
 
       # it { is_expected.to respond_to(:touch_in).with(1).argument }
       it 'records the entry station after touch in' do
-        subject.top_up(Oystercard::MINIMUM_BALANCE)
-        subject.touch_in(station)
-        expect(subject.entry_station).to eq station
+        oystercard.top_up(Oystercard::MINIMUM_BALANCE)
+        oystercard.touch_in(station)
+        expect(oystercard.entry_station).to eq station
       end
-
     end
 
     describe '#touch_out' do
@@ -53,21 +55,35 @@ describe Oystercard do
 
       it 'sets in_journey to false' do
         #subject.touch_in
-        subject.touch_out
-        expect(subject).not_to be_in_journey
+        oystercard.touch_out(station)
+        expect(oystercard).not_to be_in_journey
       end
 
       it 'deducts money for trip' do
         amount = Oystercard::MINIMUM_CHARGE
-        subject.top_up(Oystercard::MINIMUM_BALANCE)
-        subject.touch_in(station)
-        expect { subject.touch_out }.to change { subject.balance }.by(-amount)
+        oystercard.top_up(Oystercard::MINIMUM_BALANCE)
+        oystercard.touch_in(station)
+        expect { oystercard.touch_out(station) }.to change { oystercard.balance }.by(-amount)
       end
     end
 
     describe '#in_journey?' do
       it 'is initially not in a journey' do
-        expect(subject).not_to be_in_journey
+        expect(oystercard).not_to be_in_journey
+      end
+    end
+
+    describe '#journey_history' do
+      it 'card starts with no history' do
+        expect(oystercard.journey_history).to eq ({})
+      end
+
+
+      it 'returns the journey history' do
+        oystercard.top_up(Oystercard::MINIMUM_BALANCE)
+        oystercard.touch_in("Marylebone")
+        oystercard.touch_out("Hammersmith")
+        expect(oystercard.journey_history).to eq ({"Marylebone" => "Hammersmith"})
       end
     end
   end

@@ -1,12 +1,15 @@
+require 'pry'
+
 class Oystercard
   DEFAULT_VALUE = 0
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
   MINIMUM_CHARGE = 1
-  attr_reader :balance, :entry_station
+  attr_reader :balance, :entry_station, :exit_station, :journey_history
 
   def initialize(balance = DEFAULT_VALUE)
     @balance = balance
+    @journey_history = {}
   end
 
   def top_up(amount)
@@ -24,9 +27,10 @@ class Oystercard
     @entry_station = station
   end
 
-  def touch_out
-  deduct(MINIMUM_CHARGE)
-   @entry_station = nil
+  def touch_out(station)
+    deduct(MINIMUM_CHARGE)
+    @exit_station = station
+    journey_history[entry_station] = exit_station
   end
 
   def in_journey?
