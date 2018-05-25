@@ -28,9 +28,4 @@ describe Oystercard do
       expect { oystercard.touch_in(station) }.to raise_error "Insufficient funds"
     end
 
-    describe '#journey_history' do
-      it 'card starts with no history' do
-        expect(oystercard.journey_history).to eq ({})
-      end
-  end
 end
