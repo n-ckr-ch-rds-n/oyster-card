@@ -8,13 +8,14 @@ class JourneyLog
     @log = []
   end
 
-  def start(entrystation)
-    current_journey(entrystation)
+  def start(entrystation, entryzone)
+    current_journey(entrystation, entryzone)
   end
 
-  def finish(exitstation)
+  def finish(exitstation, exitzone)
     @current_journey.exit_station= exitstation
-    @current_journey.finish
+    @current_journey.exit_zone= exitzone
+    @current_journey.finish(exitstation, exitzone)
     @log << @current_journey
   end
 
@@ -28,8 +29,8 @@ class JourneyLog
 
   private
 
-  def current_journey(entrystation)
-    @current_journey = @journey_class.new(entrystation)
+  def current_journey(entrystation, entryzone)
+    @current_journey = @journey_class.new(entrystation, entryzone)
     return @current_journey unless @current_journey.complete?
   end
 

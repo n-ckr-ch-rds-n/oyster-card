@@ -3,7 +3,8 @@ require 'journey'
 describe Journey do
   context 'There is an entry station and an exit station' do
 
-    subject(:journey) { described_class.new("Hammersmith","Angel") }
+    subject(:journey) { described_class.new("Hammersmith", 1, "Angel", 3) }
+    let(:station) { double :Station }
 
       it 'responds to #finish, #fare, and #complete' do
         expect(journey).to respond_to(:finish)
@@ -12,7 +13,7 @@ describe Journey do
       end
 
       it 'has an entry station' do
-        expect(journey.entry_station).to eq "Hammersmith"
+        expect(journey.entry_station).to eq (station)
       end
 
       it 'has en exit station' do
@@ -27,12 +28,6 @@ describe Journey do
         it 'returns true when in_journey is false' do
           journey.finish
           expect(journey.complete?).to eq true
-        end
-      end
-
-      describe '#fare' do
-        it 'returns the correct fare when there is an entry station and exit station' do
-          expect(journey.fare).to eq Journey::CORRECT_FARE
         end
       end
   end

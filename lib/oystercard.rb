@@ -14,21 +14,22 @@ class Oystercard
   end
 
   def top_up(amount)
-    raise "Balance cannot be above £ #{Oystercard::MAXIMUM_BALANCE}" if full?
+    raise "Balance cannot be above £ #{MAXIMUM_BALANCE}" if ((@balance + amount) > MAXIMUM_BALANCE)
+    raise "Balance cannot be above £ #{MAXIMUM_BALANCE}" if full?
     @balance += amount
   end
 
   def full?
-    balance >= MAXIMUM_BALANCE
+    @balance >= MAXIMUM_BALANCE
   end
 
-  def touch_in(entrystation = nil)
+  def touch_in(entrystation = nil, entryzone)
     fail "Insufficient funds" if balance < MINIMUM_BALANCE
-    @journey_log.start(entrystation)
+    @journey_log.start(entrystation, entryzone)
   end
 
-  def touch_out(exitstation = nil)
-    @journey_log.finish(exitstation)
+  def touch_out(exitstation = nil, exitzone)
+    @journey_log.finish(exitstation, exitzone)
     deduct(@journey_log.fare)
   end
 
@@ -41,5 +42,5 @@ private
   def deduct(amount)
     @balance -= amount
   end
-  
+
 end
